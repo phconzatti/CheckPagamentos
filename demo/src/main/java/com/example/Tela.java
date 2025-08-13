@@ -2,6 +2,11 @@ package com.example;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -111,5 +116,41 @@ public class Tela {
         } else {
             model.removeElementAt(indexPagamento);
         }
+    }
+
+    public void carregarDados() {
+        List<String> pagosCarregados = new ArrayList<>();
+        List<String> pagarCarregados = new ArrayList<>();
+        try (FileInputStream fileInPagar = new FileInputStream("aPagar.dat");
+            FileInputStream fileInPagos = new FileInputStream("Pagos.dat");
+            ObjectInputStream inPagar = new ObjectInputStream(fileInPagar);
+            ObjectInputStream inPagos = new ObjectInputStream(fileInPagos)) {
+            
+                pagosCarregados = (List<String>) inPagos.readObject();
+                pagarCarregados = (List<String>) inPagar.readObject();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+        }
+
+        if (pagarCarregados.isEmpty()) {
+            model = new DefaultListModel<>();
+        } else {
+            model = new DefaultListModel<>();
+            for (String s : pagarCarregados) {
+                model.addElement(s);
+            }
+        }
+
+        if (pagosCarregados.isEmpty()) {
+            modelPago = new DefaultListModel<>();
+        } else {
+            for (String s : pagosCarregados) {
+                modelPago.addElement(s);
+            }
+        }
+
+
     }
 }

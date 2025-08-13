@@ -19,6 +19,7 @@ public class Tela {
     private JButton pagamentoEfetuadoButton;
     private JTextField nomePagamento;
     private int indexPagamento;
+    private int indexPagos;
     private JList <String> listaPagamento; 
     private JList <String> listaPagos;
     private JScrollPane scrollPagamento;
@@ -46,6 +47,8 @@ public class Tela {
         pagosLabel = new JLabel("Pagos:");
         aPagarLabel = new JLabel("A pagar:");
         adicionarLabel = new JLabel("Novo pagamento:");
+        indexPagamento = -1;
+        indexPagos = -1;
 
         adicionarPagamentoButton.addActionListener(new ActionListener() {
             @Override
@@ -59,8 +62,7 @@ public class Tela {
         removerPagamentoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                indexPagamento = listaPagamento.getSelectedIndex();
-                model.removeElementAt(indexPagamento);
+                removePagamentoMetodo();
             }
         });
         
@@ -96,5 +98,18 @@ public class Tela {
 
     public JPanel getPainel() {
         return Painel;
+    }
+
+    public void removePagamentoMetodo() {
+        indexPagamento = listaPagamento.getSelectedIndex();
+        indexPagos = listaPagos.getSelectedIndex();
+        if (indexPagamento == -1 && indexPagos == -1) {
+            return;
+        }
+        if (indexPagamento == -1 && indexPagos != -1) {
+            modelPago.removeElementAt(indexPagos);
+        } else {
+            model.removeElementAt(indexPagamento);
+        }
     }
 }
